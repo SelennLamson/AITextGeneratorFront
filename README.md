@@ -1,5 +1,7 @@
 # AITextGeneratorFront
-Front-end VueJS application for AI powered text generation
+Front-end VueJS application for AI powered text generation.
+
+Linked to the backend Python application AITextGeneration: https://github.com/WeazelDev/AITextGenerator
 
 ## Project setup
 ```
