@@ -43,6 +43,26 @@
     margin-left: 0px;
 }
 
+.size-btns-container {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.size-toggle-btn {
+    max-height: 36px;
+    min-height: 36px;
+}
+
+.genre-selection-dropdown {
+    width: 145px;
+    max-width: 145px;
+    height: 36px;
+}
+
+.v-menu__content {
+    max-height: 600px !important;
+}
+
 // --------- ENTITIES ---------
 
 .entities-toolbar {
@@ -288,16 +308,12 @@
     outline: none;
 }
 
-.vb > .vb-dragger {
-    margin-left: 15px;
+.text-area > .vb-dragger {
     z-index: 5;
     width: 12px;
-    left: 0;
-}
-
-.text-area > .vb-dragger {
     left: auto;
     right: 0;
+    margin-right: 2px;
 }
 
 .vb > .vb-dragger > .vb-dragger-styler {

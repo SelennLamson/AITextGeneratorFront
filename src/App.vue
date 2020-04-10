@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
       <app-toolbar></app-toolbar>
-      <v-content>
+      <v-content id="main-app">
         <router-view/>
       </v-content>
       <app-footer></app-footer>
@@ -27,6 +27,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#main-app {
+    padding-top: 60px !important;
+    padding-bottom: 30px !important;
+    max-height: 100vh;
 }
 
 #nav {

@@ -9,5 +9,9 @@
 #footer {
     font-size: 14px;
     background-color: #d6d6d6;
+    height: 30px;
+    max-height: 30px;
+    width: 100vw;
+    max-width: 100vw;
 }
 </style>

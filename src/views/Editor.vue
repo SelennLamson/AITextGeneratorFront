@@ -65,6 +65,36 @@
                         Generate
                     </v-btn>
                 </div>
+
+                <!-- Size selection -->
+                <div class='size-btns-container'>
+                    <v-btn-toggle mandatory class='size-toggle'>
+                        <v-btn text class='size-toggle-btn'
+                        @click="selectedSize='SMALL'">
+                            SMALL
+                        </v-btn>
+
+                        <v-btn text class='size-toggle-btn'
+                        @click="selectedSize='MEDIUM'">
+                            MEDIUM
+                        </v-btn>
+
+                        <v-btn text class='size-toggle-btn'
+                        @click="selectedSize='LARGE'">
+                            LARGE
+                        </v-btn>
+                    </v-btn-toggle>
+                </div>
+
+                <!-- Genre selection -->
+                <v-select
+                :items="genres"
+                :value="selectedGenre"
+                label="Genre"
+                class="genre-selection-dropdown"
+                dense
+                >
+                </v-select>
             </v-col>
         </v-row>
 
@@ -210,6 +240,12 @@
             Unable to connect to server...
             <v-btn color="white" text @click="snackbar = false">Close</v-btn>
         </v-snackbar>
+
+        <!-- Error notification: text too long -->
+        <v-snackbar v-model="snackbarLimit" color='red lighten-1'>
+            Sorry but your text is above the character limit to be processed by our servers...
+            <v-btn color="white" text @click="snackbarLimit = false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -230,6 +266,7 @@ import { Heading,
         } from 'tiptap-extensions';
 import GenerationMark from './../components/GenerationMark';
 import WaitingMark from './../components/WaitingMark';
+import config from './../config';
 import axios from 'axios';
 import uuid from 'uuid';
 
@@ -271,6 +308,9 @@ export default {
             entities: [],
             ent_categ: 'PER',
             selected: [],
+            selectedSize: 'SMALL',
+            genres: ['adventure', 'biography', 'children', 'fantasy', 'history', 'horror', 'mystery', 'romance', 'science-fiction', 'thriller'],
+            selectedGenre: '',
             removed_entities: [],
             added_entities: [],
             generations: [],
@@ -278,8 +318,8 @@ export default {
             generationOngoing: false,
             textHasChanged: false,
             snackbar: false,
-            // backend: "http://34.254.95.93:7777/"
-            backend: "http://localhost:7777/"
+            snackbarLimit: false,
+            backend: config.BACKEND
         }
     },
 
@@ -350,6 +390,8 @@ export default {
 
     // Initialization
     created() {
+        this.selectedGenre = this.genres[0];
+
         setInterval(() => {
             if (this.textHasChanged) {
                 this.textHasChanged = false;
@@ -395,14 +437,33 @@ export default {
 
         // Launches text generation on server
         generateText() {
+            if (this.editor.state.doc.textContent.length > config.MAX_CHARS) {
+                this.snackbarLimit = true;
+                return;
+            }
+
+
             this.aiLoading = true;
             this.generationOngoing = true;
             const { from, to } = this.editor.selection;
 
             // Cleaning entity names
-            let entity_strs = [];
+            let persons = [];
+            let locations = [];
+            let organisations = [];
+            let misc = [];
             for (var i = 0; i < this.selected.length; i++) {
-                entity_strs.push(this.selected[i].split(':', 2)[1]);
+                let tag = this.selected[i].split(':', 2)[0];
+                let ent = this.selected[i].split(':', 2)[0];
+                if (tag == 'PER') {
+                    persons.push(ent);
+                } else if (tag == 'LOC') {
+                    locations.push(ent);
+                } else if (tag == 'ORG') {
+                    organisations.push(ent);
+                } else {
+                    misc.push(ent);
+                }
             }
 
             let me = this;
@@ -413,9 +474,12 @@ export default {
                     p1: this.editor.state.doc.textBetween(Math.max(0, from - 2000), from, ' ').trim(),
                     sp2: sp2_txt.trim(),
                     p3: this.editor.state.doc.textBetween(to, Math.min(to + 2000, this.editor.state.doc.nodeSize - 2), ' ').trim(),
-                    entities: entity_strs,
-                    theme: 'horror',
-                    size: 'M'
+                    persons: persons,
+                    locations: locations,
+                    organisations: organisations,
+                    misc: misc,
+                    genre: this.selectedGenre,
+                    size: '[' + this.selectedSize.substring(0, 1) + ']'
             };
 
             let generation_id = uuid.v4();
@@ -630,6 +694,11 @@ export default {
 
         // Launches entity extraction on server
         extractEntities() {
+            if (this.editor.state.doc.textContent.length > config.MAX_CHARS) {
+                this.snackbarLimit = true;
+                return;
+            }
+
             this.aiLoading = true;
             let me = this;
             

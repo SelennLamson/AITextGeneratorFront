@@ -16,9 +16,9 @@ const routes = [
     component: () => import('../views/Editor')
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login')
+    path: '/feedback',
+    name: 'Feedback',
+    component: () => import('../views/Feedback')
   }
 ]
 

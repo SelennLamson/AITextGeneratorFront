@@ -1,0 +1,146 @@
+.background {
+    height: 100%;
+    padding: 0px;
+    background-color: #eeeeee;
+}
+
+.page-row {
+    height: 100%;
+}
+
+.page-col {
+    height: 100%;
+    background-color: white;
+    padding: 0px;
+    padding-left: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.page-body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.page-body:before {
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    height:30px;
+    width:100%;
+    background: linear-gradient(rgb(255, 255, 255), rgba(0,0,0,0));
+}
+
+.page-body:after {
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    height:30px;
+    width:100%;
+    background: linear-gradient(rgba(0,0,0,0), rgb(255, 255, 255));
+}
+
+.page-body > .vb-dragger {
+    z-index: 5;
+    width: 12px;
+    left: auto;
+    right: 0;
+    margin-right: 2px;
+}
+
+.page-content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-right: 50px;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: justify;
+}
+
+.vb > .vb-dragger > .vb-dragger-styler {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: rotate3d(0,0,0,0);
+    transform: rotate3d(0,0,0,0);
+    -webkit-transition:
+        background-color 100ms ease-out,
+        margin 100ms ease-out,
+        height 100ms ease-out;
+    transition:
+        background-color 100ms ease-out,
+        margin 100ms ease-out,
+        height 100ms ease-out;
+    background-color: rgba(231, 231, 231, 0.3);
+    margin: 5px 5px 5px 0;
+    border-radius: 20px;
+    height: calc(100% - 10px);
+    display: block;
+}
+
+.vb.vb-scrolling-phantom > .vb-dragger > .vb-dragger-styler {
+    background-color: rgba(189, 189, 189, 0.7);
+}
+
+.vb.vb-dragging-phantom > .vb-dragger > .vb-dragger-styler {
+    background-color: rgba(189, 189, 189, 0.7);
+}
+
+.menububble {
+    position: absolute;
+    display: flex;
+    z-index: 20;
+    background: #09a15a00;
+    border-width: 0px;
+    border-radius: 3px;
+    margin-bottom: 0.5rem;
+    transform: translate3d(-50%, +30%, 0);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+    padding: 0px;
+
+    &.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &__button {
+        min-width: 20px !important;
+        max-width: 20px;
+        min-height: 20px !important;
+        max-height: 20px;
+        padding: 0px !important;
+
+        display: inline-flex;
+        background-color: white;
+        border: 0;
+        margin: 0px;
+        border-radius: 9px;
+        cursor: pointer;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &:hover {
+            background-color: rgba(white, 1);
+        }
+
+        &.is-active {
+            background-color: rgba(white, 1);
+        }
+    }
+
+    &__form {
+        display: flex;
+        align-items: center;
+    }
+
+    &__input {
+        font: inherit;
+        border: none;
+        background: transparent;
+        color: white;
+    }
+}
