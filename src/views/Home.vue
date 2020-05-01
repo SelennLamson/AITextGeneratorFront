@@ -23,12 +23,13 @@
 
                             <!-- CLICK INVITATIONS -->
                             <p style="text-align: right; margin-bottom:0px;"><v-icon>mdi-arrow-top-right</v-icon></p>
-                            <p style="text-align: right; margin-right:35px; line-height:40px;">Click on
-                            <span style='color: #333333; background-color:#ebebeb; padding:2px 4px; margin:2px; border-radius:2px; letter-spacing:1.25px; font-weight: 500;'>
-                            EDITOR</span> to begin writing some text<br/>
-                            and on 
-                            <span style='color: #333333; background-color:#ebebeb; padding:2px 4px; margin:2px; border-radius:2px; letter-spacing:1.25px; font-weight: 500;'>
-                            FEEDBACK</span> to give us your thoughts!</p>
+                            <p style="text-align: right; margin-right:35px; line-height:30px;">Click on
+                            <router-link to='/editor' style='text-decoration: none;'><span class='menu-link-sim'>EDITOR</span></router-link>
+                            to begin writing some text,<br/>
+                            <router-link to='/share' style='text-decoration: none;'><span class='menu-link-sim'>SHARE</span></router-link>
+                             to exchange your best generations,<br/>
+                            <router-link to='/feedback' style='text-decoration: none;'><span class='menu-link-sim'>FEEDBACK</span></router-link>
+                             to give us your thoughts!</p>
 
                             <!-- POWERED BY -->
                             <h3 style="text-align: center; margin-top:50px;">
@@ -182,6 +183,33 @@
                             <!-- Academic paper link -->
                             <div style="float:left; width:4%; text-align:center;"><v-icon color='black'>mdi-school</v-icon></div>
                             <div style="float:left; width:96%;">Academic paper in progress...</div>
+
+                            <div style="float:left; width:100%; margin-top: 50px;"></div>
+
+                            <!-- AUTHORS -->
+                            <h2>Authors</h2>
+                            <p>We are three Master of Science students at Centrale Supélec Paris, working on this project since a few months.
+                            We hope you enjoyed using our experimental tool as much as we did while creating it!</p>
+
+                            <!-- Alexandre Duval's link -->
+                            <div style="float:left; width:4%; text-align:center;"><v-icon color='black'>mdi-account</v-icon></div>
+                            <div style="float:left; width:96%;"><a href="https://www.linkedin.com/in/alexandre-duval-b00531128/" target="_blank">
+                                Alexandre Duval</a> <v-icon small>mdi-open-in-new</v-icon></div>
+
+                            <div style="float:left; width:100%; margin-top: 10px;"></div>
+
+                            <!-- Thomas Lamson's link -->
+                            <div style="float:left; width:4%; text-align:center;"><v-icon color='black'>mdi-account</v-icon></div>
+                            <div style="float:left; width:96%;"><a href="http://thomas-lamson.com/" target="_blank">
+                                Thomas Lamson</a> <v-icon small>mdi-open-in-new</v-icon></div>
+
+                            <div style="float:left; width:100%; margin-top: 10px;"></div>
+
+                            <!-- Gaël de Léséleuc's link -->
+                            <div style="float:left; width:4%; text-align:center;"><v-icon color='black'>mdi-account</v-icon></div>
+                            <div style="float:left; width:96%;"><a href="https://www.linkedin.com/in/ga%C3%ABl-de-l%C3%A9s%C3%A9leuc-8a768519b/" target="_blank">
+                                Gaël de Léséleuc</a> <v-icon small>mdi-open-in-new</v-icon></div>
+                            
                         </div>
                     </div>
                 </div>

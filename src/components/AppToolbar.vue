@@ -13,6 +13,9 @@
       <router-link to='/editor'>
         <v-btn text>Editor</v-btn>
       </router-link>
+      <router-link to='/share'>
+        <v-btn text>Share</v-btn>
+      </router-link>
       <router-link to='/feedback'>
         <v-btn text>Feedback</v-btn>
       </router-link>

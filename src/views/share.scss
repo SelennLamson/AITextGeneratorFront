@@ -42,14 +42,6 @@
     background: linear-gradient(rgba(0,0,0,0), rgb(255, 255, 255));
 }
 
-.page-body > .vb-dragger {
-    z-index: 5;
-    width: 12px;
-    left: auto;
-    right: 0;
-    margin-right: 2px;
-}
-
 .page-content {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -58,14 +50,44 @@
     text-align: justify;
 }
 
-.menu-link-sim {
-    color: #333333;
-    background-color:#ebebeb;
-    padding:2px 4px;
-    margin:2px;
-    border-radius:2px;
-    letter-spacing:1.25px;
-    font-weight: 500;
+.message-entry {
+    margin: 20px;
+    padding: 5px 10px;
+    min-height: 65px;
+    display: flex;
+    flex-direction: row;
+}
+
+.message-text {
+    width: 86%;
+    align-self: center;
+}
+
+.message-pseudo {
+    width: 10%;
+    text-align: center;
+    // height: 20px;
+    align-self: flex-end;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.open-quote-icon {
+    width: 2%;
+    align-self: flex-start;
+}
+
+.close-quote-icon {
+    width: 2%;
+    align-self: flex-end;
+}
+
+.page-body > .vb-dragger {
+    z-index: 5;
+    width: 12px;
+    left: auto;
+    right: 0;
+    margin-right: 2px;
 }
 
 .vb > .vb-dragger > .vb-dragger-styler {

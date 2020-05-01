@@ -3,7 +3,7 @@
         <v-row align="center" justify="center">
             <v-col cols="12" sm="10" md="8">
                 <v-form>
-                    <v-card class="elevation-8 feedback-form">
+                    <v-card class="feedback-form">
                         <v-toolbar flat>
                             <v-toolbar-title>Tell us what you think of this tool!</v-toolbar-title>
                         </v-toolbar>
@@ -23,8 +23,8 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer />
-                            <v-btn color="primary" type="submit"
-                            :disabled='canSubmit'
+                            <v-btn color="primary"
+                            :disabled='!canSubmit'
                             @click='submitFeedback'>
                                 Submit
                             </v-btn>
@@ -68,13 +68,11 @@ export default {
     },
     computed: {
         canSubmit() {
-            return this.message.length < 10;
+            return this.message.length > 10;
         }
     },
     methods: {
         submitFeedback() {
-            console.log("SENDING MESSAGE")
-
             let me = this;
 
             let params = {
@@ -89,9 +87,11 @@ export default {
                 timeout: 2 * 1000,
                 data: params,
             })
-            .then(function (response) {
+            .then(function () {
                 // Response received: success
-                console.log(response);
+
+                me.message = ''
+                me.email = ''
                 
                 me.snackbar.confirm = true;
             })

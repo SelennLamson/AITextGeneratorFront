@@ -309,7 +309,7 @@ export default {
             ent_categ: 'PER',
             selected: [],
             selectedSize: 'SMALL',
-            genres: ['adventure', 'biography', 'children', 'fantasy', 'history', 'horror', 'mystery', 'romance', 'science-fiction', 'thriller'],
+            genres: ['adventure', 'biography/history', 'children', 'fantasy', 'romance', 'science-fiction', 'thriller'],
             selectedGenre: '',
             removed_entities: [],
             added_entities: [],
@@ -319,7 +319,9 @@ export default {
             textHasChanged: false,
             snackbar: false,
             snackbarLimit: false,
-            backend: config.BACKEND
+            backend: config.BACKEND,
+            generation_ip: "",
+            ner_ip: ""
         }
     },
 
@@ -399,6 +401,11 @@ export default {
             }
         }, 5*1000);
 
+        setInterval(() => {
+            this.updateBackendIps();
+        }, 20*1000);
+        this.updateBackendIps();
+
         let str_rem = localStorage["ai_text_removed_entities"];
         if (str_rem != undefined)
             this.removed_entities = JSON.parse(str_rem);
@@ -435,13 +442,44 @@ export default {
             localStorage["ai_text_editor_content"] = this.editor.getHTML()
         },
 
+        // Asks the main backend for the IPs of the generation and NER backends
+        updateBackendIps() {
+            let me = this;
+
+            let params = {
+                    order: 'ipconfig'
+            };
+
+            axios({
+                method: 'post',
+                url: this.backend,
+                timeout: 5 * 1000,
+                data: params,
+            })
+            .then(function (response) {
+                // Response received: success
+                let ips = response.data.split('|');
+                me.generation_ip = ips[0];
+                me.ner_ip = ips[1];
+            })
+            .catch(function (error) {
+                // No response received: error
+                console.log(error);
+                me.snackbar = true;
+            });
+        },
+
         // Launches text generation on server
         generateText() {
+            if (this.generation_ip == "") {
+                this.snackbar = true;
+                return;
+            }
+
             if (this.editor.state.doc.textContent.length > config.MAX_CHARS) {
                 this.snackbarLimit = true;
                 return;
             }
-
 
             this.aiLoading = true;
             this.generationOngoing = true;
@@ -499,10 +537,9 @@ export default {
                 {blockId: generation_id}));
             this.editor.dispatchTransaction(tr);
 
-
             axios({
                 method: 'post',
-                url: this.backend,
+                url: this.generation_ip,
                 timeout: 20 * 1000,
                 data: params,
             })
@@ -694,6 +731,11 @@ export default {
 
         // Launches entity extraction on server
         extractEntities() {
+            if (this.ner_ip == "") {
+                this.snackbar = true;
+                return;
+            }
+
             if (this.editor.state.doc.textContent.length > config.MAX_CHARS) {
                 this.snackbarLimit = true;
                 return;
@@ -708,7 +750,7 @@ export default {
             };
 
             axios
-            .post(this.backend, params)
+            .post(this.ner_ip, params)
             .then(function (response) {
                 // Response received: success
                 me.entities = response.data.split('</p><p>').filter(elt => elt != '')

@@ -16,6 +16,11 @@ const routes = [
     component: () => import('../views/Editor')
   },
   {
+    path: '/share',
+    name: 'Share',
+    component: () => import('../views/Share')
+  },
+  {
     path: '/feedback',
     name: 'Feedback',
     component: () => import('../views/Feedback')
