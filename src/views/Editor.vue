@@ -549,15 +549,24 @@ export default {
                 let texts = [];
                 texts.push(sp2_txt);
                 let new_texts = response.data.split("||");
+
                 for (var i = 0; i < new_texts.length; i++) {
-                    texts.push(new_texts[i].trim());
+                    let current_text = new_texts[i].trim();
+                    if (current_text != "") {
+                        texts.push(new_texts[i].trim());
+                    }
                 }
 
-                generation.suggestions = texts;
-                generation.active = true;
+                if (texts.length > 1) {
+                    generation.suggestions = texts;
+                    generation.active = true;
 
-                me.saveGenerations();
-                me.selectSuggestion(generation, 1);
+                    me.saveGenerations();
+                    me.selectSuggestion(generation, 1);
+                } else {
+                    me.removeSelection(generation);
+                    me.snackbar = true;
+                }
 
                 me.aiLoading = false;
                 me.generationOngoing = false;
@@ -565,10 +574,20 @@ export default {
             .catch(function (error) {
                 // No response received: error
                 console.log(error);
+
+                me.removeSelection(generation)
+
+                me.aiLoading = false;
+                me.generationOngoing = false;
+                me.snackbar = true;
+            });
+        },
+
+        removeSelection(generation) {
                 let deletefrom = null;
                 let deleteto;
 
-                me.editor.state.doc.descendants((node, pos) => {
+                this.editor.state.doc.descendants((node, pos) => {
                     for (var i = 0; i < node.marks.length; i++) {
                         const mark = node.marks[i];
                         if (mark.type && mark.type.name === 'waiting') {
@@ -584,13 +603,8 @@ export default {
                 })
 
                 if (deletefrom && deleteto) {
-                    me.editor.dispatchTransaction(me.editor.state.tr.removeMark(deletefrom, deleteto));
+                    this.editor.dispatchTransaction(this.editor.state.tr.removeMark(deletefrom, deleteto));
                 }
-
-                me.aiLoading = false;
-                me.generationOngoing = false;
-                me.snackbar = true;
-            });
         },
 
         saveGenerations() {
