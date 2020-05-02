@@ -1,7 +1,7 @@
 <template>
   <v-footer app id="footer">
     <v-spacer></v-spacer>
-    <div>Made with Vuetify by Thomas Lamson, All rights reserved &copy; {{ new Date().getFullYear() }}</div>
+    <div>Made with Vuetify by <a href="http://thomas-lamson.com/" target="_blank">Thomas Lamson</a>, All rights reserved &copy; {{ new Date().getFullYear() }}</div>
   </v-footer>
 </template>
 

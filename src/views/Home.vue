@@ -207,7 +207,7 @@
 
                             <!-- Gaël de Léséleuc's link -->
                             <div style="float:left; width:4%; text-align:center;"><v-icon color='black'>mdi-account</v-icon></div>
-                            <div style="float:left; width:96%;"><a href="https://www.linkedin.com/in/ga%C3%ABl-de-l%C3%A9s%C3%A9leuc-8a768519b/" target="_blank">
+                            <div style="float:left; width:96%;"><a href="https://github.com/dldk-gael" target="_blank">
                                 Gaël de Léséleuc</a> <v-icon small>mdi-open-in-new</v-icon></div>
                             
                         </div>
