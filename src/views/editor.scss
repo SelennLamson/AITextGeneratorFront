@@ -25,6 +25,8 @@
     color: #bbbbbb;
     animation-name: appear;
     animation-duration: 0.5s;
+    max-height: 25px;
+    overflow: hidden;
 }
 
 @keyframes appear {
@@ -68,7 +70,6 @@
 .entities-toolbar {
     background-color: white;
     padding: 0px;
-    padding-left: 10px;
     width: 100%;
     min-height: 36px;
     display:flex;
@@ -99,8 +100,8 @@
 	box-shadow: none;
     padding: 0px !important;
 
-    min-width: 10% !important;
-    max-width: 10%;
+    min-width: 30px !important;
+    width: 30px;
 
     color: lightgrey;
 }
@@ -118,7 +119,6 @@
     height: 100%;
     border-radius: 0px;
     margin: 0px;
-    margin-left: 10px;
     flex-grow: 1;
 }
 
@@ -153,7 +153,6 @@
 .entities-categ-toolbar {
     width: 100%;
     min-height: 48px;
-    padding-left: 10px;
     border-radius: 0px;
     justify-content: space-evenly;
     align-self: flex-end;
@@ -189,7 +188,6 @@
     flex-wrap: nowrap;
     flex-direction: column;
     overflow: hidden;
-    padding-right: 15px;
 }
 
 .generation-first-row {
@@ -223,6 +221,8 @@
     padding: 0px !important;
     padding-right: 5px !important;
     border-radius: 0px;
+    min-width: 0px !important;
+    padding: 0px !important;
 }
 
 .generation-items-container {
@@ -239,6 +239,8 @@
     border-width: 0px !important;
     flex-grow: 1;
     max-height: 40px;
+    min-width: 0px !important;
+    padding: 0px !important;
 }
 
 .generations-table-container {
@@ -290,6 +292,8 @@
 
 .text-area-row {
     height: 78vh;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
 }
 
 // --------- OTHERS ---------

@@ -73,6 +73,10 @@ export default {
     },
     methods: {
         submitFeedback() {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localPort = localStorage["local_port"] !== undefined ? localStorage["local_port"] : "7777"
+            let localIp = "http://localhost:" + localPort + "/"
+
             let me = this;
 
             let params = {
@@ -83,7 +87,7 @@ export default {
 
             axios({
                 method: 'post',
-                url: this.backend,
+                url: local ? localIp : this.backend,
                 timeout: 2 * 1000,
                 data: params,
             })

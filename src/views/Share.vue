@@ -116,6 +116,10 @@ export default {
     methods:{
         // Retrieves the last hundred messages posted on server
         loadMessages() {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localPort = localStorage["local_port"] !== undefined ? localStorage["local_port"] : "7777"
+            let localIp = "http://localhost:" + localPort + "/"
+
             let params = {
                 order: 'getshared'
             };
@@ -124,7 +128,7 @@ export default {
 
             axios({
                 method: 'post',
-                url: this.backend,
+                url: local ? localIp : this.backend,
                 timeout: 1 * 1000,
                 data: params,
             })
@@ -154,6 +158,10 @@ export default {
 
         // Posts a text on the server
         postMessage() {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localPort = localStorage["local_port"] !== undefined ? localStorage["local_port"] : "7777"
+            let localIp = "http://localhost:" + localPort + "/"
+
             let me = this;
 
             let params = {
@@ -164,7 +172,7 @@ export default {
 
             axios({
                 method: 'post',
-                url: this.backend,
+                url: local ? localIp : this.backend,
                 timeout: 2 * 1000,
                 data: params,
             })

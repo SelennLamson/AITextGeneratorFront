@@ -23,7 +23,7 @@
 
                 <!-- Text formatting -->
                 <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-                    <div>
+                    <div style="max-height: 30px; overflow:hidden;">
                         <v-btn text icon class="btn"
                         :class="{ 'is-active': isActive.heading({ level: 1 }) }"
                         @click="commands.heading({level: 1})">
@@ -237,7 +237,7 @@
 
         <!-- Error notification: unable to connect to server -->
         <v-snackbar v-model="snackbar" color='red lighten-1'>
-            Unable to connect to server...
+            Servers are overloaded... Please retry in a few moments.
             <v-btn color="white" text @click="snackbar = false">Close</v-btn>
         </v-snackbar>
 
@@ -293,7 +293,7 @@ export default {
                     new WaitingMark()
                 ],
                 onInit: () => {
-                    setTimeout(this.extractEntities, 100);
+                    setTimeout(this.extractEntities, 3000);
                 },
                 onUpdate: () => {
                     this.updateGenerations();
@@ -309,7 +309,7 @@ export default {
             ent_categ: 'PER',
             selected: [],
             selectedSize: 'SMALL',
-            genres: ['adventure', 'biography/history', 'children', 'fantasy', 'romance', 'science-fiction', 'thriller'],
+            genres: ['fiction', 'adventure', 'biography/history', 'children', 'fantasy', 'romance', 'science-fiction', 'thriller'],
             selectedGenre: '',
             removed_entities: [],
             added_entities: [],
@@ -321,7 +321,9 @@ export default {
             snackbarLimit: false,
             backend: config.BACKEND,
             generation_ip: "",
-            ner_ip: ""
+            ner_ip: "",
+            generation_port: "",
+            ner_port: "",
         }
     },
 
@@ -444,6 +446,10 @@ export default {
 
         // Asks the main backend for the IPs of the generation and NER backends
         updateBackendIps() {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localPort = localStorage["local_port"] !== undefined ? localStorage["local_port"] : "7777"
+            let localIp = "http://localhost:" + localPort + "/"
+
             let me = this;
 
             let params = {
@@ -452,15 +458,17 @@ export default {
 
             axios({
                 method: 'post',
-                url: this.backend,
+                url: local ? localIp : this.backend,
                 timeout: 5 * 1000,
                 data: params,
             })
             .then(function (response) {
                 // Response received: success
                 let ips = response.data.split('|');
-                me.generation_ip = ips[0];
-                me.ner_ip = ips[1];
+                me.generation_port = ips[0].split(':')[1];
+                me.ner_port = ips[1].split(':')[1];
+                me.generation_ip = 'http://' + ips[0] + '/';
+                me.ner_ip = 'http://' + ips[1] + '/';
             })
             .catch(function (error) {
                 // No response received: error
@@ -471,7 +479,10 @@ export default {
 
         // Launches text generation on server
         generateText() {
-            if (this.generation_ip == "") {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localIp = "http://localhost:" + this.generation_port + "/"
+
+            if (this.generation_ip == "" && !local) {
                 this.snackbar = true;
                 return;
             }
@@ -492,7 +503,7 @@ export default {
             let misc = [];
             for (var i = 0; i < this.selected.length; i++) {
                 let tag = this.selected[i].split(':', 2)[0];
-                let ent = this.selected[i].split(':', 2)[0];
+                let ent = this.selected[i].split(':', 2)[1];
                 if (tag == 'PER') {
                     persons.push(ent);
                 } else if (tag == 'LOC') {
@@ -539,8 +550,8 @@ export default {
 
             axios({
                 method: 'post',
-                url: this.generation_ip,
-                timeout: 20 * 1000,
+                url: local ? localIp : this.generation_ip,
+                timeout: 60 * 1000,
                 data: params,
             })
             .then(function (response) {
@@ -573,6 +584,7 @@ export default {
             })
             .catch(function (error) {
                 // No response received: error
+                console.log("Encountered an error in generation API call")
                 console.log(error);
 
                 me.removeSelection(generation)
@@ -745,7 +757,10 @@ export default {
 
         // Launches entity extraction on server
         extractEntities() {
-            if (this.ner_ip == "") {
+            let local = localStorage["local_server"] !== undefined && localStorage["local_server"] == '1'
+            let localIp = "http://localhost:" + this.ner_port + "/"
+
+            if (this.ner_ip == "" && !local) {
                 this.snackbar = true;
                 return;
             }
@@ -763,8 +778,12 @@ export default {
                     body: this.editor.getHTML()
             };
 
-            axios
-            .post(this.ner_ip, params)
+            axios({
+                method: 'post',
+                url: local ? localIp : this.ner_ip,
+                timeout: 10 * 1000,
+                data: params,
+            })
             .then(function (response) {
                 // Response received: success
                 me.entities = response.data.split('</p><p>').filter(elt => elt != '')
@@ -773,6 +792,7 @@ export default {
             })
             .catch(function (error) {
                 // No response received: error
+                console.log("Encountered an error during NER API call")
                 console.log(error);
                 me.aiLoading = false;
                 me.snackbar = true;
